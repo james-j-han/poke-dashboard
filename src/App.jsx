@@ -15,6 +15,10 @@ function App() {
   // track what the user types
   const [searchTerm, setSearchTerm] = useState('');
 
+  const filteredPokemon = pokemon.filter((p) =>
+    p.name.toLowerCase().includes(searchTerm.toLowerCase())
+  );
+
   function getRandomId() {
     return Math.floor(Math.random() * 1000) + 1;
   }
@@ -43,9 +47,15 @@ function App() {
   }, [])
 
   return (
-    <>
-      <Dashboard pokemon={pokemon} />
-    </>
+    <div className='main-container'>
+      <input
+        type='text'
+        placeholder='Search Pokemon'
+        value={searchTerm}
+        onChange={(e) => setSearchTerm(e.target.value)}
+      />
+      <Dashboard pokemon={filteredPokemon} />
+    </div>
   )
 }
 
