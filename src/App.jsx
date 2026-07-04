@@ -15,12 +15,31 @@ function App() {
   // track what the user types
   const [searchTerm, setSearchTerm] = useState('');
 
-  const filteredPokemon = pokemon.filter((p) =>
-    p.name.toLowerCase().includes(searchTerm.toLowerCase())
+  // track which types user selects
+  const [selectedTypes, setSelectedTypes] = useState([]);
+
+  const filteredPokemon = pokemon
+    .filter((p) => p.name.toLowerCase().includes(searchTerm.toLowerCase()))
+    // if selectedTypes is empty show everything
+    .filter((p) => selectedTypes.length === 0 || p.types.some((t) => selectedTypes.includes(t.type.name))
   );
+
+  // get a list of unique types in the fetched data
+  // map over the data and retrieve the types which may return a nested array (more than 1 type for a pokemon)
+  // flatten to collapse nested arrays into one level
+  // create a set to remove duplicates and convert back to an array/list with the spread operator
+  const uniqueTypes = [...new Set(pokemon.flatMap((p) => p.types.map((t) => t.type.name)))];
 
   function getRandomId() {
     return Math.floor(Math.random() * 1000) + 1;
+  }
+
+  function toggleType(type) {
+    // remove type if already selected or add if not selected
+    setSelectedTypes(selectedTypes.includes(type)
+      ? selectedTypes.filter((t) => t !== type)
+      : [...selectedTypes, type]
+    );
   }
 
   // fetch data once on load/mount
@@ -54,6 +73,16 @@ function App() {
         value={searchTerm}
         onChange={(e) => setSearchTerm(e.target.value)}
       />
+      {uniqueTypes.map((type) => (
+        <label key={type}>
+          <input
+            type='checkbox'
+            checked={selectedTypes.includes(type)}
+            onChange={() => toggleType(type)}
+          />
+          {type}
+        </label>
+      ))}
       <Dashboard pokemon={filteredPokemon} />
     </div>
   )
