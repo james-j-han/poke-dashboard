@@ -8,7 +8,7 @@ function SummaryItem({ label, pokemon, getValue }) {
 
     return (
         <div className="summary-item">
-            <p>{label}</p>
+            <h2>{label}</h2>
             <p>{average}</p>
         </div>
     )

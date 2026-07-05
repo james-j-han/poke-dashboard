@@ -9,15 +9,15 @@ function Dashboard({ pokemon }) {
                 <SummaryItem label='Average Height' pokemon={pokemon} getValue={(p) => p.height} />
                 <SummaryItem label='Average Base Stat' pokemon={pokemon} getValue={(p) => p.stats[0].base_stat} />
             </div>
+            <div className="item-header">
+                <span>Sprite</span>
+                <span>Name</span>
+                <span>Weight</span>
+                <span>Height</span>
+                <span>Base Stat</span>
+                <span>Type</span>
+            </div>
             <div className='item-container'>
-                <div className="item-header">
-                    <span>Sprite</span>
-                    <span>Name</span>
-                    <span>Weight</span>
-                    <span>Height</span>
-                    <span>Base Stat</span>
-                    <span>Type</span>
-                </div>
                 <Item pokemon={pokemon} />
             </div>
         </div>

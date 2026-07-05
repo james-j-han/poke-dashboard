@@ -5,8 +5,27 @@ import heroImg from './assets/hero.png'
 import './App.css'
 
 import Dashboard from './components/Dashboard'
+import FilterPanel from './components/FilterPanel'
+import Header from './components/Header'
 
+// declare outside component as it has no react dependency, purely utility
 const BASE_URL = 'https://pokeapi.co/api/v2';
+
+function getUniqueRandomIds(count) {
+    // create a set so we ignore duplicates automatically and prevent key duplicates in Item component
+    const ids = new Set();
+
+    // loop until set is of size count
+    while (ids.size < count) {
+
+      // PokeAPI has a 1300-1400 ids, we use a base number of 1000 which should be plenty of unqiue Pokemon
+      ids.add(Math.floor(Math.random() * 1000) + 1);
+    }
+
+    // convert set to list
+    return [...ids];
+    // return Math.floor(Math.random() * 1000) + 1;
+  }
 
 function App() {
 
@@ -18,10 +37,38 @@ function App() {
   // track which types user selects
   const [selectedTypes, setSelectedTypes] = useState([]);
 
+  const [statFilters, setStatFilters] = useState({
+    weight: { operator: 'gte', value: '' },
+    height: { operator: 'gte', value: '' },
+    base_stat: { operator: 'gte', value: '' },
+  });
+
+  function handleStatFilterChange(field, operator, value) {
+    // keep previous statFilters and only overwrite the one that changed
+    // we are using the spread operator inside {}, which behaves differently than lists []
+    // this will create a copy and instead of adding to it, will overwrite the matching key
+    // this way we are constantly updating filters while keeping reference to current filters
+    setStatFilters((prev) => ({
+      ...prev,
+      [field]: { operator, value }
+    }));
+  }
+
+  const operators = {
+    gt: (a, b) => a > b,
+    gte: (a, b) => a >= b,
+    lt: (a, b) => a < b,
+    lte: (a, b) => a <= b,
+    eq: (a, b) => a === b,
+  };
+
   const filteredPokemon = pokemon
     .filter((p) => p.name.toLowerCase().includes(searchTerm.toLowerCase()))
     // if selectedTypes is empty show everything
-    .filter((p) => selectedTypes.length === 0 || p.types.some((t) => selectedTypes.includes(t.type.name))
+    .filter((p) => selectedTypes.length === 0 || p.types.some((t) => selectedTypes.includes(t.type.name)))
+    .filter((p) => statFilters.weight.value === '' || operators[statFilters.weight.operator](p.weight, Number(statFilters.weight.value)))
+    .filter((p) => statFilters.height.value === '' || operators[statFilters.height.operator](p.height, Number(statFilters.height.value)))
+    .filter((p) => statFilters.base_stat.value === '' || operators[statFilters.base_stat.operator](p.stats[0].base_stat, Number(statFilters.base_stat.value))
   );
 
   // get a list of unique types in the fetched data
@@ -29,10 +76,6 @@ function App() {
   // flatten to collapse nested arrays into one level
   // create a set to remove duplicates and convert back to an array/list with the spread operator
   const uniqueTypes = [...new Set(pokemon.flatMap((p) => p.types.map((t) => t.type.name)))];
-
-  function getRandomId() {
-    return Math.floor(Math.random() * 1000) + 1;
-  }
 
   function toggleType(type) {
     // remove type if already selected or add if not selected
@@ -46,9 +89,9 @@ function App() {
   useEffect(() => {
     async function fetchPokemon() {
       try {
-        // generate array of 20 random IDs
+        // generate array of random IDs
         // could improve to avoid duplicates but rare with 1000
-        const ids = Array.from({ length: 10 }, () => getRandomId());
+        const ids = getUniqueRandomIds(50);
 
         // promise over async/await to fetch multiple simultaneously
         const results = await Promise.all(
@@ -67,22 +110,15 @@ function App() {
 
   return (
     <div className='main-container'>
-      <input
-        type='text'
-        placeholder='Search Pokemon'
-        value={searchTerm}
-        onChange={(e) => setSearchTerm(e.target.value)}
+      <Header />
+      <FilterPanel
+        searchTerm={searchTerm}
+        setSearchTerm={setSearchTerm}
+        selectedTypes={selectedTypes}
+        toggleType={toggleType}
+        uniqueTypes={uniqueTypes}
+        onStatFilterChange={handleStatFilterChange}
       />
-      {uniqueTypes.map((type) => (
-        <label key={type}>
-          <input
-            type='checkbox'
-            checked={selectedTypes.includes(type)}
-            onChange={() => toggleType(type)}
-          />
-          {type}
-        </label>
-      ))}
       <Dashboard pokemon={filteredPokemon} />
     </div>
   )
