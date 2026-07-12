@@ -4,6 +4,11 @@
   align-items: center;
 }
 
+.header-container a {
+  text-decoration: none;
+  color: inherit;
+}
+
 .dashboard-container {
   display: flex;
   flex-direction: column;
@@ -31,6 +36,12 @@
   margin: 4px 0 4px 0;
   height: 60px;
   border-radius: 10px;
+  text-decoration: none;
+  color: inherit;
+}
+
+.item-row:visited {
+  color: inherit;
 }
 
 .item-row img {
