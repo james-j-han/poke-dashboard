@@ -1,6 +1,7 @@
 import { useOutletContext } from 'react-router';
 import { useState } from 'react'
 import SummaryItem from './SummaryItem'
+import StatsChart from './StatsChart';
 import FilterPanel from './FilterPanel'
 import Item from './Item'
 
@@ -75,16 +76,21 @@ function Dashboard() {
                 <SummaryItem label='Average Height' pokemon={filteredPokemon} getValue={(p) => p.height} />
                 <SummaryItem label='Average Base Stat' pokemon={filteredPokemon} getValue={(p) => p.stats[0].base_stat} />
             </div>
-            <div className="item-header">
-                <span>Sprite</span>
-                <span>Name</span>
-                <span>Weight</span>
-                <span>Height</span>
-                <span>Base Stat</span>
-                <span>Type</span>
-            </div>
-            <div className='item-container'>
-                <Item pokemon={filteredPokemon} />
+            <div className='split-container'>
+                <div className='item-container'>
+                    <div className="item-header">
+                        <span>Sprite</span>
+                        <span>Name</span>
+                        <span>Weight</span>
+                        <span>Height</span>
+                        <span>Base Stat</span>
+                        <span>Type</span>
+                    </div>
+                    <div className='item'>
+                        <Item pokemon={filteredPokemon} />
+                    </div>
+                </div>
+                <StatsChart pokemon={filteredPokemon} uniqueTypes={uniqueTypes} />
             </div>
         </div>
     )

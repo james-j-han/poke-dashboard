@@ -37,67 +37,69 @@ function FilterPanel({ searchTerm, setSearchTerm, selectedTypes, toggleType, uni
                 ))}
             </div>
 
-            <div className='stat-filter'>
-                <label>Weight</label>
-                <OperatorSelect 
-                    value={weightOperator}
-                    onChange={(e) => {
-                        setWeightOperator(e.target.value);
-                        handleStatChange('weight', e.target.value, weightValue);
-                    }}
-                />
-                <input
-                    type='number'
-                    min='0'
-                    step='50'
-                    value={weightValue}
-                    onChange={(e) => {
-                        setWeightValue(e.target.value);
-                        handleStatChange('weight', weightOperator, e.target.value);
-                    }}
-                />
-            </div>
+            <div className='stat-filter-container'>
+                <div className='stat-filter'>
+                    <label>Weight</label>
+                    <OperatorSelect 
+                        value={weightOperator}
+                        onChange={(e) => {
+                            setWeightOperator(e.target.value);
+                            handleStatChange('weight', e.target.value, weightValue);
+                        }}
+                    />
+                    <input
+                        type='number'
+                        min='0'
+                        step='50'
+                        value={weightValue}
+                        onChange={(e) => {
+                            setWeightValue(e.target.value);
+                            handleStatChange('weight', weightOperator, e.target.value);
+                        }}
+                    />
+                </div>
 
-            <div className='stat-filter'>
-                <label>Height</label>
-                <OperatorSelect 
-                    value={heightOperator}
-                    onChange={(e) => {
-                        setHeightOperator(e.target.value);
-                        handleStatChange('height', e.target.value, heightValue);
-                    }}
-                />
-                <input
-                    type='number'
-                    min='0'
-                    step='50'
-                    value={heightValue}
-                    onChange={(e) => {
-                        setHeightValue(e.target.value);
-                        handleStatChange('height', heightOperator, e.target.value);
-                    }}
-                />
-            </div>
+                <div className='stat-filter'>
+                    <label>Height</label>
+                    <OperatorSelect 
+                        value={heightOperator}
+                        onChange={(e) => {
+                            setHeightOperator(e.target.value);
+                            handleStatChange('height', e.target.value, heightValue);
+                        }}
+                    />
+                    <input
+                        type='number'
+                        min='0'
+                        step='50'
+                        value={heightValue}
+                        onChange={(e) => {
+                            setHeightValue(e.target.value);
+                            handleStatChange('height', heightOperator, e.target.value);
+                        }}
+                    />
+                </div>
 
-            <div className='stat-filter'>
-                <label>Base Stat</label>
-                <OperatorSelect 
-                    value={weightOperator}
-                    onChange={(e) => {
-                        setBaseStatOperator(e.target.value);
-                        handleStatChange('base_stat', e.target.value, baseStatValue);
-                    }}
-                />
-                <input
-                    type='number'
-                    min='0'
-                    step='50'
-                    value={baseStatValue}
-                    onChange={(e) => {
-                        setBaseStatValue(e.target.value);
-                        handleStatChange('base_stat', baseStatOperator, e.target.value);
-                    }}
-                />
+                <div className='stat-filter'>
+                    <label>Base Stat</label>
+                    <OperatorSelect 
+                        value={weightOperator}
+                        onChange={(e) => {
+                            setBaseStatOperator(e.target.value);
+                            handleStatChange('base_stat', e.target.value, baseStatValue);
+                        }}
+                    />
+                    <input
+                        type='number'
+                        min='0'
+                        step='50'
+                        value={baseStatValue}
+                        onChange={(e) => {
+                            setBaseStatValue(e.target.value);
+                            handleStatChange('base_stat', baseStatOperator, e.target.value);
+                        }}
+                    />
+                </div>
             </div>
         </div>
     )
